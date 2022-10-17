@@ -14,16 +14,33 @@ export default function Items({ navigation, route }) {
   const [data, setdata] = useState(contacts);
   const [clicked, setClicked] = useState(false);
   const [currentID, setCureentId] = useState("");
+  const [isDESC, setDESC] = useState(true);
+  //   const [color, setcolor] = useState("");
 
   const isClicked = (id) => {
     setClicked(true);
     setCureentId(id);
+    // setcolor("#39FF14");
   };
 
   const deleteContact = (id) => {
     const filtered = data.filter((c) => c.id !== currentID);
     setdata(filtered);
   };
+
+  const toggle = () => {
+    return setDESC(!isDESC);
+  };
+
+  if (isDESC) {
+    const nameDESC = contacts
+      .sort(({ name: a }, { name: b }) => a.localeCompare(b))
+      .map(({ name }) => `${name}`);
+  } else {
+    const nameASC = contacts
+      .sort(({ name: a }, { name: b }) => b.localeCompare(a))
+      .map(({ name }) => `${name}`);
+  }
 
   return (
     <ScrollView>
@@ -41,10 +58,18 @@ export default function Items({ navigation, route }) {
               deleteContact();
             }}
           />
+
           <Button
             title="CANCEL"
             onPress={() => {
               setClicked(false);
+            }}
+          />
+
+          <Button
+            title={`${isDESC ? "Dessending" : "Accending"} Order`}
+            onPress={() => {
+              toggle();
             }}
           />
         </View>
@@ -79,6 +104,7 @@ const styles = StyleSheet.create({
   },
   buttons: {
     flexDirection: "row",
-    alignSelf: "space-around",
+    alignSelf: "space-between",
+    // border: "1px solid #39FF14",
   },
 });
